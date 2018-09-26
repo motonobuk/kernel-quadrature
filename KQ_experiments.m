@@ -92,7 +92,7 @@ for i=1:len_s
     p = polyfit( log(list_N(ID_nz)), log(errors(i,ID_nz)), 1);
     a = p(1);
     b = p(2);
-    loglog(list_N,exp(b)*list_N.^a,':','linewidth',2, 'Color',Col(i)); hold on;
+    loglog(list_N,exp(b)*list_N.^a,'-.','linewidth',1.75, 'Color',Col(i)); hold on;
     list_a(i) = a;
 end
 list_a = round(list_a,3);
@@ -101,7 +101,7 @@ ID_nz = WCEs>tol;
 p = polyfit( log(list_N(ID_nz)), log(WCEs(ID_nz)), 1 );
 a_WCE = p(1);
 b_WCE = p(2);
-loglog(list_N, exp(b_WCE)*list_N.^a_WCE,'k:','linewidth',2); hold on
+loglog(list_N, exp(b_WCE)*list_N.^a_WCE,'k-.','linewidth',1.75); hold on
 a_WCE = round(a_WCE,3);
 
 ID_nz = SepRadius > tol;
@@ -115,11 +115,11 @@ a_Fil = p(1);
 p = polyfit( log(list_N), log(AbsSumWeights), 1 );
 a_weights = p(1);
 
-legend({strcat('s = 1 :  ', num2str(list_a(1))),...
-    strcat('s = 2 :  ', num2str(list_a(2))),...
-    strcat('s = 3 :  ', num2str(list_a(3))),...
-    strcat('s = 4 :  ', num2str(list_a(4))),...
-    strcat('r = ', char(8239), char(8239), num2str(r), ' :  ', num2str(a_WCE))},...    
+legend({strcat('s = 1:', char(8239), num2str(list_a(1))),...
+    strcat('s = 2:', char(8239), num2str(list_a(2))),...
+    strcat('s = 3:', char(8239), num2str(list_a(3))),...
+    strcat('s = 4:', char(8239), num2str(list_a(4))),...
+    strcat('r = ', char(8239), char(8239), num2str(r), ':', char(8239), num2str(a_WCE))},...    
     'Location','SouthWest','FontSize', 20);
 xlabel('Sample size');
 ylabel('Worst case error');
