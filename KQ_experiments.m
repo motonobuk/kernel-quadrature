@@ -15,14 +15,14 @@ if rem(d,2) == 0
    error('The dimension d must be odd.'); 
 end
 
-r = 4;  % Smoothness of the Wendland kernel used for computing quadrature weights
+r = 1;  % Smoothness of the Wendland kernel used for computing quadrature weights
 k = r - (d+1)/2;
 if k < 0
    error('r should be larger than or equal to (d+1)/2'); 
 end
 
-%DesignPoints = 'Equidist'; % Equally spaced design points
-DesignPoints = 'Irregular'; % Irregularly spaced design points
+DesignPoints = 'Equidist'; % Equally spaced design points
+%DesignPoints = 'Irregular'; % Irregularly spaced design points
 
 delta = 0.1; % Bandwidth of the Wendland kernel
 
@@ -95,14 +95,12 @@ for i=1:len_s
     loglog(list_N,exp(b)*list_N.^a,'-.','linewidth',1.75, 'Color',Col(i)); hold on;
     list_a(i) = a;
 end
-list_a = round(list_a,3);
 
 ID_nz = WCEs>tol;
 p = polyfit( log(list_N(ID_nz)), log(WCEs(ID_nz)), 1 );
 a_WCE = p(1);
 b_WCE = p(2);
 loglog(list_N, exp(b_WCE)*list_N.^a_WCE,'k-.','linewidth',1.75); hold on
-a_WCE = round(a_WCE,3);
 
 ID_nz = SepRadius > tol;
 p = polyfit( log(list_N(ID_nz)), log(SepRadius(ID_nz)), 1 );
@@ -115,16 +113,18 @@ a_Fil = p(1);
 p = polyfit( log(list_N), log(AbsSumWeights), 1 );
 a_weights = p(1);
 
-legend({strcat('s = 1:', char(8239), num2str(list_a(1))),...
-    strcat('s = 2:', char(8239), num2str(list_a(2))),...
-    strcat('s = 3:', char(8239), num2str(list_a(3))),...
-    strcat('s = 4:', char(8239), num2str(list_a(4))),...
-    strcat('r = ', char(8239), char(8239), num2str(r), ':', char(8239), num2str(a_WCE))},...    
+legend({strcat('s = 1:', char(8239), sprintf('%0.3f',list_a(1))),...
+    strcat('s = 2:', char(8239), sprintf('%0.3f',list_a(2))),...
+    strcat('s = 3:', char(8239), sprintf('%0.3f',list_a(3))),...
+    strcat('s = 4:', char(8239), sprintf('%0.3f',list_a(4))),...
+    strcat('r = ', char(8239), char(8239), num2str(r), ':', char(8239),sprintf('%0.3f',a_WCE))},...    
     'Location','SouthWest','FontSize', 20);
 xlabel('Sample size');
 ylabel('Worst case error');
 
-title( ['Fill Dist: ', num2str(round(a_Fil,2)), '. Sep Rad: ',...
-    num2str(round(a_Sep,2)), '. Weights: ', num2str(round(a_weights,2)), '.' ] )
+
+
+title( ['Fill Dist: ', sprintf('%0.2f',a_Fil), '; Sep Rad: ',...
+    sprintf('%0.2f',a_Sep), '; Weights: ', sprintf('%0.2f',a_weights), ' ' ] )
 hold on;
 
